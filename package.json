@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^5.16.7",
+    "@next/env": "^14.2.5",
+    "mongodb": "^6.8.0",
+    "pg": "^8.12.0",
+    "prisma": "^5.18.0"
+  }
+}
