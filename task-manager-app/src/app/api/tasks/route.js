@@ -32,3 +32,17 @@ export async function GET(req, res) {
     )
   }
 }
+
+export async function DELETE(req, res) {
+  try {
+    const id = req.nextUrl.searchParams.get("id")
+    await connectMongoDB()
+    await Task.findByIdAndDelete(id)
+    return NextResponse.json({ message: "Task deleted successfully" })
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Error deleting task", error },
+      { status: 500 }
+    )
+  }
+}
