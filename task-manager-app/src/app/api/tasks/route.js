@@ -7,11 +7,8 @@ export async function POST(req, res) {
     await connectMongoDB()
     const body = await req.json()
     const task = new Task(body)
-    await task.save()
-    return NextResponse.json(
-      { message: "Task created successfully" },
-      { status: 201 }
-    )
+    const savedTask = await task.save()
+    return NextResponse.json(savedTask, { status: 201 })
   } catch (error) {
     return NextResponse.json(
       { message: "Error creating task", error },
