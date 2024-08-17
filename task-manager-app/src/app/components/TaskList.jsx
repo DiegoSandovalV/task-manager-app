@@ -42,6 +42,16 @@ const TaskList = () => {
     setTasks(tasks.filter((task) => task._id !== id))
   }
 
+  const toggleTask = async (id) => {
+    const res = await fetch(`/api/tasks?id=${id}`, { method: "PUT" })
+    if (res.ok) {
+      const updatedTask = await res.json()
+      setTasks(
+        tasks.map((task) => (task._id === updatedTask._id ? updatedTask : task))
+      )
+    }
+  }
+
   return (
     <div>
       <Typography variant="h4">Task List</Typography>
@@ -57,7 +67,10 @@ const TaskList = () => {
       <List>
         {tasks.map((task) => (
           <ListItem key={task._id}>
-            <Checkbox checked={task.completed} />
+            <Checkbox
+              checked={task.completed}
+              onChange={() => toggleTask(task._id)}
+            />
             <Typography
               sx={{
                 textDecoration: task.completed ? "line-through" : "none",

@@ -33,12 +33,51 @@ export async function GET(req, res) {
 export async function DELETE(req, res) {
   try {
     const id = req.nextUrl.searchParams.get("id")
+
+    if (!id) {
+      return NextResponse.json(
+        { message: "Task ID is required" },
+        { status: 400 }
+      )
+    }
+
     await connectMongoDB()
     await Task.findByIdAndDelete(id)
     return NextResponse.json({ message: "Task deleted successfully" })
   } catch (error) {
     return NextResponse.json(
       { message: "Error deleting task", error },
+      { status: 500 }
+    )
+  }
+}
+
+export async function PUT(req) {
+  try {
+    await connectMongoDB()
+    const { searchParams } = new URL(req.url)
+    const id = searchParams.get("id")
+
+    if (!id) {
+      return NextResponse.json(
+        { message: "Task ID is required" },
+        { status: 400 }
+      )
+    }
+
+    const task = await Task.findById(id)
+
+    if (!task) {
+      return NextResponse.json({ message: "Task not found" }, { status: 404 })
+    }
+
+    task.completed = !task.completed
+    await task.save()
+
+    return NextResponse.json(task)
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Error toggling task", error },
       { status: 500 }
     )
   }
