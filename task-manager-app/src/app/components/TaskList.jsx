@@ -2,15 +2,17 @@
 
 import { useEffect, useState } from "react"
 import {
+  Box,
+  Typography,
+  TextField,
   Button,
   List,
   ListItem,
   Checkbox,
-  Typography,
   IconButton,
-  TextField,
-  Box,
 } from "@mui/material"
+import AddCircleIcon from "@mui/icons-material/AddCircle"
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever"
 import { ThemeProvider } from "@mui/material/styles"
 import theme from "../theme"
 
@@ -84,59 +86,96 @@ const TaskList = () => {
             justifyContent: "center",
             alignItems: "center",
             height: "100vh",
+            p: 2,
           }}
         >
           <Box
             sx={{
               backgroundColor: "secondary.main",
-              padding: 4,
-              borderRadius: 2,
-              boxShadow: 3,
+              padding: 3,
+              borderRadius: 3,
+              boxShadow: 5,
               maxWidth: 600,
               width: "100%",
+              minHeight: 500,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
             }}
           >
-            <Typography variant="h4">Task List</Typography>
-            <TextField
-              value={newTask}
-              onChange={handleInputChange}
-              label="New Task"
-              fullWidth
-              error={!!error}
-              helperText={error || `${charCount}/200`}
-            />
-            <Button
-              onClick={addTask}
-              variant="contained"
-              color="primary"
-              disabled={!!error || newTask.length === 0}
+            <Typography
+              variant="h4"
+              sx={{
+                textAlign: "center",
+                mb: 2,
+              }}
             >
-              Add Task
-            </Button>
-            <List>
-              {tasks.map((task) => (
-                <ListItem key={task._id}>
-                  <Checkbox
-                    checked={task.completed}
-                    onChange={() => toggleTask(task._id)}
-                  />
-                  <Typography
-                    sx={{
-                      textDecoration: task.completed ? "line-through" : "none",
-                      flexGrow: 1,
-                      mr: 2,
-                    }}
+              Onboarding Tasks
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <TextField
+                value={newTask}
+                onChange={handleInputChange}
+                label="New Task"
+                fullWidth
+                error={!!error}
+                helperText={error || `${charCount}/200`}
+              />
+              <IconButton
+                onClick={addTask}
+                color="primary"
+                disabled={!!error || newTask.length === 0}
+                sx={{
+                  "& .MuiSvgIcon-root": {
+                    fontSize: 40,
+                  },
+                }}
+              >
+                <AddCircleIcon />
+              </IconButton>
+            </Box>
+            <Box
+              sx={{
+                flexGrow: 1,
+                overflowY: "auto",
+                height: 0,
+              }}
+            >
+              <List>
+                {tasks.map((task) => (
+                  <ListItem
+                    key={task._id}
+                    sx={{ display: "flex", alignItems: "center" }}
                   >
-                    {task.description}
-                  </Typography>
-                  <IconButton onClick={() => deleteTask(task._id)}>
-                    <span role="img" aria-label="delete">
-                      ❌
-                    </span>
-                  </IconButton>
-                </ListItem>
-              ))}
-            </List>
+                    <Checkbox
+                      checked={task.completed}
+                      onChange={() => toggleTask(task._id)}
+                    />
+                    <Typography
+                      sx={{
+                        textDecoration: task.completed
+                          ? "line-through"
+                          : "none",
+                        color: task.completed ? "grey" : "black",
+                        flexGrow: 1,
+                        mr: 2,
+                      }}
+                    >
+                      {task.description}
+                    </Typography>
+                    <IconButton onClick={() => deleteTask(task._id)}>
+                      <DeleteForeverIcon color="error" />
+                    </IconButton>
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
           </Box>
         </Box>
       </ThemeProvider>
