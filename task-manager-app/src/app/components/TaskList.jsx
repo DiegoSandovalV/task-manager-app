@@ -14,6 +14,8 @@ import {
 const TaskList = () => {
   const [tasks, setTasks] = useState([])
   const [newTask, setNewTask] = useState("")
+  const [charCount, setCharCount] = useState(0)
+  const [error, setError] = useState("")
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -24,16 +26,34 @@ const TaskList = () => {
     fetchTasks()
   }, [])
 
+  const handleInputChange = (e) => {
+    const value = e.target.value
+    setNewTask(value)
+    setCharCount(value.length)
+
+    if (value.length === 0) {
+      setError("Task description cannot be empty")
+    } else if (value.length > 200) {
+      setError("Task description cannot exceed 200 characters")
+    } else {
+      setError("")
+    }
+  }
+
   const addTask = async () => {
-    if (newTask.length === 0 || newTask.length > 200) return
+    if (error || newTask.length === 0 || newTask.length > 200) return
+
     const res = await fetch("/api/tasks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ description: newTask, completed: false }),
     })
+
     if (res.ok) {
-      setTasks([...tasks, await res.json()])
+      const createdTask = await res.json()
+      setTasks([...tasks, createdTask])
       setNewTask("")
+      setCharCount(0)
     }
   }
 
@@ -57,11 +77,18 @@ const TaskList = () => {
       <Typography variant="h4">Task List</Typography>
       <TextField
         value={newTask}
-        onChange={(e) => setNewTask(e.target.value)}
+        onChange={handleInputChange}
         label="New Task"
         fullWidth
+        error={!!error}
+        helperText={error || `${charCount}/200`}
       />
-      <Button onClick={addTask} variant="contained" color="primary">
+      <Button
+        onClick={addTask}
+        variant="contained"
+        color="primary"
+        disabled={!!error || newTask.length === 0}
+      >
         Add Task
       </Button>
       <List>
