@@ -18,7 +18,10 @@ const TaskList = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       const headers = new Headers()
-      headers.append("Access-Control-Allow-Origin", "*")
+      headers.append(
+        "Access-Control-Allow-Origin",
+        "https://task-manager-app-puce.vercel.app/"
+      )
       headers.append(
         "Access-Control-Allow-Methods",
         "GET,OPTIONS,PATCH,DELETE,POST,PUT"
