@@ -2,6 +2,8 @@ import connectMongoDB from "../../libs/mongodb"
 import Task from "../../models/task"
 import { NextResponse } from "next/server"
 
+export const dynamic = "force-dynamic"
+
 export async function POST(req, res) {
   try {
     await connectMongoDB()

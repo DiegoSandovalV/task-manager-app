@@ -17,7 +17,9 @@ const TaskList = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const res = await fetch("/api/tasks")
+      const res = await fetch(
+        "https://task-manager-8f8lemphg-diego-sandovals-projects-16741e27.vercel.app/api/tasks"
+      )
       const data = await res.json()
       setTasks(data.tasks)
     }
