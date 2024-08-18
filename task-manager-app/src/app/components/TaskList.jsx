@@ -9,6 +9,7 @@ import {
   Typography,
   IconButton,
   TextField,
+  Box,
 } from "@mui/material"
 import { ThemeProvider } from "@mui/material/styles"
 import theme from "../theme"
@@ -77,47 +78,67 @@ const TaskList = () => {
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <Typography variant="h4">Task List</Typography>
-        <TextField
-          value={newTask}
-          onChange={handleInputChange}
-          label="New Task"
-          fullWidth
-          error={!!error}
-          helperText={error || `${charCount}/200`}
-        />
-        <Button
-          onClick={addTask}
-          variant="contained"
-          color="primary"
-          disabled={!!error || newTask.length === 0}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
         >
-          Add Task
-        </Button>
-        <List>
-          {tasks.map((task) => (
-            <ListItem key={task._id}>
-              <Checkbox
-                checked={task.completed}
-                onChange={() => toggleTask(task._id)}
-              />
-              <Typography
-                sx={{
-                  textDecoration: task.completed ? "line-through" : "none",
-                  flexGrow: 1,
-                  mr: 2,
-                }}
-              >
-                {task.description}
-              </Typography>
-              <IconButton onClick={() => deleteTask(task._id)}>
-                <span role="img" aria-label="delete">
-                  ❌
-                </span>
-              </IconButton>
-            </ListItem>
-          ))}
-        </List>
+          <Box
+            sx={{
+              backgroundColor: "secondary.main",
+              padding: 4,
+              borderRadius: 2,
+              boxShadow: 3,
+              maxWidth: 600,
+              width: "100%",
+            }}
+          >
+            <Typography variant="h4">Task List</Typography>
+            <TextField
+              value={newTask}
+              onChange={handleInputChange}
+              label="New Task"
+              fullWidth
+              error={!!error}
+              helperText={error || `${charCount}/200`}
+            />
+            <Button
+              onClick={addTask}
+              variant="contained"
+              color="primary"
+              disabled={!!error || newTask.length === 0}
+            >
+              Add Task
+            </Button>
+            <List>
+              {tasks.map((task) => (
+                <ListItem key={task._id}>
+                  <Checkbox
+                    checked={task.completed}
+                    onChange={() => toggleTask(task._id)}
+                  />
+                  <Typography
+                    sx={{
+                      textDecoration: task.completed ? "line-through" : "none",
+                      flexGrow: 1,
+                      mr: 2,
+                    }}
+                  >
+                    {task.description}
+                  </Typography>
+                  <IconButton onClick={() => deleteTask(task._id)}>
+                    <span role="img" aria-label="delete">
+                      ❌
+                    </span>
+                  </IconButton>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Box>
       </ThemeProvider>
     </div>
   )
