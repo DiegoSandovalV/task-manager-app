@@ -17,19 +17,18 @@ const TaskList = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const headers = new Headers()
-      headers.append(
-        "Access-Control-Allow-Origin",
-        "https://task-manager-app-puce.vercel.app/"
-      )
-      headers.append(
-        "Access-Control-Allow-Methods",
-        "GET,OPTIONS,PATCH,DELETE,POST,PUT"
-      )
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+        },
+      }
 
       const res = await fetch(
         "https://task-manager-8f8lemphg-diego-sandovals-projects-16741e27.vercel.app/api/tasks",
-        { headers }
+        { options }
       )
       const data = await res.json()
       setTasks(data.tasks)
