@@ -12,9 +12,9 @@ import {
   IconButton,
 } from "@mui/material"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever"
 import { ThemeProvider } from "@mui/material/styles"
 import theme from "../theme"
+import TaskItem from "./TaskItem"
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([])
@@ -22,14 +22,13 @@ const TaskList = () => {
   const [charCount, setCharCount] = useState(0)
   const [error, setError] = useState("")
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      const res = await fetch("../api/tasks")
-      const data = await res.json()
-      setTasks(data.tasks)
-    }
-    fetchTasks()
-  }, [])
+  const fetchTasks = async () => {
+    const res = await fetch("../api/tasks")
+    const data = await res.json()
+    setTasks(data.tasks)
+  }
+
+  fetchTasks()
 
   const handleInputChange = (e) => {
     const value = e.target.value
@@ -59,21 +58,6 @@ const TaskList = () => {
       setTasks([...tasks, createdTask])
       setNewTask("")
       setCharCount(0)
-    }
-  }
-
-  const deleteTask = async (id) => {
-    await fetch(`/api/tasks?id=${id}`, { method: "DELETE" })
-    setTasks(tasks.filter((task) => task._id !== id))
-  }
-
-  const toggleTask = async (id) => {
-    const res = await fetch(`/api/tasks?id=${id}`, { method: "PUT" })
-    if (res.ok) {
-      const updatedTask = await res.json()
-      setTasks(
-        tasks.map((task) => (task._id === updatedTask._id ? updatedTask : task))
-      )
     }
   }
 
@@ -150,30 +134,7 @@ const TaskList = () => {
             >
               <List>
                 {tasks.map((task) => (
-                  <ListItem
-                    key={task._id}
-                    sx={{ display: "flex", alignItems: "center" }}
-                  >
-                    <Checkbox
-                      checked={task.completed}
-                      onChange={() => toggleTask(task._id)}
-                    />
-                    <Typography
-                      sx={{
-                        textDecoration: task.completed
-                          ? "line-through"
-                          : "none",
-                        color: task.completed ? "grey" : "black",
-                        flexGrow: 1,
-                        mr: 2,
-                      }}
-                    >
-                      {task.description}
-                    </Typography>
-                    <IconButton onClick={() => deleteTask(task._id)}>
-                      <DeleteForeverIcon color="error" />
-                    </IconButton>
-                  </ListItem>
+                  <TaskItem key={task._id} task={task} />
                 ))}
               </List>
             </Box>
