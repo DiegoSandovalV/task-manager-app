@@ -135,6 +135,7 @@ const TaskList = () => {
                   "& .MuiSvgIcon-root": {
                     fontSize: 40,
                   },
+                  marginBottom: 3,
                 }}
               >
                 <AddCircleIcon />
