@@ -3,6 +3,7 @@ import { Box, Typography, List } from "@mui/material"
 import TaskItem from "./TaskItem"
 import TaskForm from "./TaskForm"
 import { useEffect, useState, useRef, Fragment } from "react"
+import Image from "next/image"
 
 async function fetchTasks() {
   const res = await fetch("https://task-manager-app-puce.vercel.app/api/tasks")
@@ -81,16 +82,36 @@ export default function TaskList() {
             }}
           >
             <List>
-              {tasks.map((task, i) => (
-                <Fragment key={i}>
-                  <TaskItem
-                    task={task}
-                    hydrate={(newTask) => {
-                      hydrate(newTask, i)
+              {tasks.length === 0 ? (
+                <div style={{ textAlign: "center" }}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      textAlign: "center",
+                      mt: 5,
                     }}
+                  >
+                    Nothing to do!
+                  </Typography>
+                  <Image
+                    src="/no_todos.svg"
+                    alt="Nothing to do!"
+                    width={200}
+                    height={200}
                   />
-                </Fragment>
-              ))}
+                </div>
+              ) : (
+                tasks.map((task, i) => (
+                  <Fragment key={i}>
+                    <TaskItem
+                      task={task}
+                      hydrate={(newTask) => {
+                        hydrate(newTask, i)
+                      }}
+                    />
+                  </Fragment>
+                ))
+              )}
             </List>
           </Box>
         </Box>
