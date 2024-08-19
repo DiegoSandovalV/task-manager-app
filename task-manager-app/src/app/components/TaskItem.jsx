@@ -3,14 +3,10 @@
 import { Checkbox, IconButton, ListItem, Typography } from "@mui/material"
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever"
 import { useRouter } from "next/navigation"
+import { deleteTaskAction } from "../libs/actions"
 
 export default function TaskItem({ task }) {
   const router = useRouter()
-  const deleteTask = async (id) => {
-    await fetch(`/api/tasks?id=${id}`, { method: "DELETE" })
-    router.refresh()
-  }
-
   const toggleTask = async (id) => {
     const res = await fetch(`/api/tasks?id=${id}`, { method: "PUT" })
     if (res.ok) {
@@ -35,7 +31,7 @@ export default function TaskItem({ task }) {
       >
         {task.description}
       </Typography>
-      <IconButton onClick={() => deleteTask(task._id)}>
+      <IconButton onClick={() => deleteTaskAction(task._id)}>
         <DeleteForeverIcon color="error" />
       </IconButton>
     </ListItem>

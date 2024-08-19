@@ -1,6 +1,4 @@
 import { Box, Typography, List } from "@mui/material"
-import { ThemeProvider } from "@mui/material/styles"
-import theme from "../theme"
 import TaskItem from "./TaskItem"
 import TaskForm from "./TaskForm"
 

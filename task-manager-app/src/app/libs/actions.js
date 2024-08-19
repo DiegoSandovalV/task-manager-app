@@ -20,3 +20,15 @@ export async function addTaskAction(formData) {
     revalidatePath("/")
   }
 }
+
+export async function deleteTaskAction(id) {
+  "use server"
+
+  const res = await fetch(
+    `https://task-manager-app-puce.vercel.app/api/tasks?id=${id}`,
+    { method: "DELETE" }
+  )
+  if (res.ok) {
+    revalidatePath("/")
+  }
+}
