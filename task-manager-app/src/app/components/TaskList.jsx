@@ -1,6 +1,8 @@
+"use client"
 import { Box, Typography, List } from "@mui/material"
 import TaskItem from "./TaskItem"
 import TaskForm from "./TaskForm"
+import { useEffect, useState, useRef, Fragment } from "react"
 
 async function fetchTasks() {
   const res = await fetch("https://task-manager-app-puce.vercel.app/api/tasks")
@@ -8,8 +10,30 @@ async function fetchTasks() {
   return tasks.tasks
 }
 
-const TaskList = async () => {
-  const tasks = await fetchTasks()
+export default function TaskList() {
+  const [tasks, setTasks] = useState([])
+
+  useEffect(() => {
+    fetchTasks().then((tasks) => {
+      setTasks(tasks)
+    })
+  }, [])
+
+  const hydrate = (newTask, idx) => {
+    if (newTask === null) {
+      setTasks((tasks) => [
+        ...tasks.slice(0, idx),
+        ...tasks.slice(idx + 1, tasks.length),
+      ])
+      return
+    }
+    setTasks((tasks) => [
+      ...tasks.slice(0, idx),
+      newTask,
+      ...tasks.slice(idx + 1, tasks.length),
+    ])
+  }
+
   return (
     <div>
       <Box
@@ -43,7 +67,11 @@ const TaskList = async () => {
           >
             Onboarding Tasks
           </Typography>
-          <TaskForm />
+          <TaskForm
+            hydrate={(newTask) => {
+              hydrate(newTask, tasks.length)
+            }}
+          />
 
           <Box
             sx={{
@@ -53,8 +81,15 @@ const TaskList = async () => {
             }}
           >
             <List>
-              {tasks.map((task) => (
-                <TaskItem key={task._id} task={task} />
+              {tasks.map((task, i) => (
+                <Fragment key={i}>
+                  <TaskItem
+                    task={task}
+                    hydrate={(newTask) => {
+                      hydrate(newTask, i)
+                    }}
+                  />
+                </Fragment>
               ))}
             </List>
           </Box>
@@ -63,5 +98,3 @@ const TaskList = async () => {
     </div>
   )
 }
-
-export default TaskList

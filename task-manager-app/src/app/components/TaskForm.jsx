@@ -1,13 +1,11 @@
 "use client"
 
-import { Button, TextField, Box, IconButton } from "@mui/material"
+import { TextField, Box, IconButton } from "@mui/material"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
-import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { addTaskAction } from "@/app/libs/actions"
 
-export default function TaskForm() {
-  const [tasks, setTasks] = useState([])
+export default function TaskForm({ hydrate }) {
   const [newTask, setNewTask] = useState("")
   const [charCount, setCharCount] = useState(0)
   const [error, setError] = useState("")
@@ -26,8 +24,17 @@ export default function TaskForm() {
     }
   }
 
+  const addTask = async (e) => {
+    e.preventDefault()
+
+    const data = await addTaskAction(new FormData(e.target))
+
+    hydrate(data)
+    setNewTask("")
+  }
+
   return (
-    <form action={addTaskAction}>
+    <form onSubmit={addTask}>
       <Box
         sx={{
           display: "flex",
