@@ -29,6 +29,8 @@ export default function TaskItem({ task, hydrate }) {
           textDecoration: task.completed ? "line-through" : "none",
           color: task.completed ? "grey" : "black",
           flexGrow: 1,
+          flexShrink: 1,
+          overflowWrap: "break-word",
           mr: 2,
         }}
       >

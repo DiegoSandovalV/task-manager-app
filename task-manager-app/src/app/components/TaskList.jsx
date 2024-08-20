@@ -5,6 +5,7 @@ import TaskForm from "./TaskForm"
 import Loading from "./Loading"
 import { useEffect, useState, useRef, Fragment } from "react"
 import Image from "next/image"
+import "../styles/bg.css"
 
 async function fetchTasks() {
   const res = await fetch("https://task-manager-app-puce.vercel.app/api/tasks")
@@ -49,7 +50,7 @@ export default function TaskList() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh",
+          height: "94vh",
           p: 2,
         }}
       >
@@ -64,6 +65,7 @@ export default function TaskList() {
             display: "flex",
             flexDirection: "column",
             gap: 2,
+            backgroundColor: "white",
           }}
         >
           <Typography
