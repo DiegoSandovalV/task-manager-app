@@ -2,6 +2,7 @@
 import { Box, Typography, List } from "@mui/material"
 import TaskItem from "./TaskItem"
 import TaskForm from "./TaskForm"
+import Loading from "./Loading"
 import { useEffect, useState, useRef, Fragment } from "react"
 import Image from "next/image"
 
@@ -13,10 +14,12 @@ async function fetchTasks() {
 
 export default function TaskList() {
   const [tasks, setTasks] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetchTasks().then((tasks) => {
       setTasks(tasks)
+      setLoading(false)
     })
   }, [])
 
@@ -33,6 +36,10 @@ export default function TaskList() {
       newTask,
       ...tasks.slice(idx + 1, tasks.length),
     ])
+  }
+
+  if (loading) {
+    return <Loading />
   }
 
   return (
